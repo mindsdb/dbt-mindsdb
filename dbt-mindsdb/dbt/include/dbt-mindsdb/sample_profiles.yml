@@ -1,11 +1,19 @@
-
 default:
+  target: dev
   outputs:
     dev:
-      type: dbt-mindsdb
-      # Add sample credentials here, like:
-      # host: <host>
-      # port: <port_num>
-      # username: <user>
-      # password: <pass>
-  target: dev
+      type: MindsDB(mysql)
+      server: [server/host]
+      port: [port]  # optional
+      database: [schema] # optional
+      username: [username]
+      password: [password]
+      driver: MySQL ODBC 8.0 ANSI Driver
+    prod:
+      type: MindsDB(mysql)
+      server: [server/host]
+      port: [port]  # optional
+      database: [schema] # optional
+      username: [username]
+      password: [password]
+      driver: MySQL ODBC 8.0 ANSI Driver
