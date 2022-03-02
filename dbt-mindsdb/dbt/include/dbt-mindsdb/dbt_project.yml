@@ -1,5 +1,5 @@
 
-name: dbt_dbt-mindsdb
+name: dbt-mindsdb
 version: 1.0
 config-version: 2
 
