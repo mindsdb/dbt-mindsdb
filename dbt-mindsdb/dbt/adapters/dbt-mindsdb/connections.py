@@ -11,6 +11,7 @@ class DbtMindsDBCredentials(Credentials):
     port: Optional[int] = None
     username: str
     password: str
+    database: Optional[str] = 'mindsdb'
 
     @property
     def type(self):
@@ -43,7 +44,8 @@ class DbtMindsDBConnectionManager(SQLConnectionManager):
                 host=credentials.host,
                 port=credentials.port,
                 username=credentials.username,
-                password=credentials.password
+                password=credentials.password,
+                database=credentials.database
             )
             connection.state = 'open'
             connection.handle = handle
