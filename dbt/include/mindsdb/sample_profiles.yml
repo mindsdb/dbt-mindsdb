@@ -1,0 +1,17 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: mindsdb
+      host: [host]
+      port: [port]  # optional
+      username: [username]
+      password: [password]
+      database: [database] # optional
+    prod:
+      type: mindsdb
+      host: [host]
+      port: [port]  # optional
+      username: [username]
+      password: [password]
+      database: [database] # optional
