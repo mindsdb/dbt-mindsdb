@@ -7,7 +7,7 @@ prompts:
   port:
     default: 3306
     type: 'int'
-  user:
+  username:
     default: 'root'
     hint: 'mindsdb cloud username or mindsdb for local'
   password:
