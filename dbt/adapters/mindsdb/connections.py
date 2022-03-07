@@ -60,10 +60,10 @@ class MindsdbConnectionManager(SQLConnectionManager):
             )
             connection.state = 'open'
             connection.handle = handle
-        except pymysql.Error as e:
+        except pymysql.Error as exc:
             logger.debug(
                 "Got an error when attempting to open a "
-                "connection: '{}'".format(e)
+                "connection: '{}'".format(exc)
             )
         return connection
 
@@ -77,7 +77,7 @@ class MindsdbConnectionManager(SQLConnectionManager):
         try:
             yield
         except pymysql.DatabaseError as exc:
-            logger.debug('myadapter error: {}'.format(str(e)))
+            logger.debug('myadapter error: {}'.format(str(exc)))
             raise dbt.exceptions.DatabaseException(str(exc))
         except Exception as exc:
             logger.debug("Error running SQL: {}".format(sql))
