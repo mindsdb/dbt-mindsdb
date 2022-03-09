@@ -20,3 +20,10 @@
   {% endcall %}
   {{ return(load_result('list_relations_without_caching').table) }}
 {% endmacro %}
+
+
+{% macro apply_predictor_wrap(sql, predictor_name, destination_table) -%}
+
+  apply predictor {{ predictor_name }} using ({{ sql }}) into table={{ destination_table }}
+
+{% endmacro %}
