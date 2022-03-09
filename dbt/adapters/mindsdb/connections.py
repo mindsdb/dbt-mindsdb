@@ -14,11 +14,11 @@ import mysql.connector
 @dataclass
 class MindsdbCredentials(Credentials):
     host: str
+    port: int
     username: str
     password: str
-    # schema: str
-    port: Optional[int] = 47335
-    database: Optional[str] = 'mindsdb'
+    database: str
+    schema: str
 
     @property
     def type(self):
@@ -28,7 +28,7 @@ class MindsdbCredentials(Credentials):
         """
         List of keys to display in the `dbt debug` output.
         """
-        return 'host', 'port', 'user', 'database'#, 'schema'
+        return 'host', 'port', 'user', 'database', 'schema'
 
 
 
@@ -53,7 +53,7 @@ class MindsdbConnectionManager(SQLConnectionManager):
         # TODO: shoud we ue pymysql?
         try:
             handle = mysql.connector.connect(
-                server=credentials.host,
+                host=credentials.host,
                 port=credentials.port,
                 username=credentials.username,
                 password=credentials.password,

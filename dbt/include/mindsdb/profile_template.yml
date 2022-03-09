@@ -5,15 +5,17 @@ prompts:
   host:
     hint: 'hostname for the mindsdb instance'
   port:
-    default: 3306
+    default: 47335
     type: 'int'
   username:
     default: 'root'
     hint: 'mindsdb cloud username or mindsdb for local'
   password:
     hint: 'database password'
+    default: ''
     hide_input: true
   database:
-    hint: 'mindsdb'
+    default: 'mindsdb'
   schema:
+    default: 'mindsdb'
     hint: 'name used by dbt internal procedures. Can be used as a table name prefix'
