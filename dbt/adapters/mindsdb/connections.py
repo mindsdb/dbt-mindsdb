@@ -2,22 +2,23 @@ from dataclasses import dataclass
 from contextlib import contextmanager
 import dbt.exceptions
 from dbt.contracts.connection import AdapterResponse
-from pymysql.cursors import Cursor
 
 from dbt.adapters.base import Credentials
 from dbt.adapters.sql import SQLConnectionManager
 from dbt.logger import GLOBAL_LOGGER as logger
 from typing import Optional
-import pymysql
+import dbt.exceptions
+import mysql.connector
+
 
 @dataclass
 class MindsdbCredentials(Credentials):
     host: str
-    port: int
     username: str
     password: str
-    database: str
-    schema: str
+    # schema: str
+    port: Optional[int] = 47335
+    database: Optional[str] = 'mindsdb'
 
     @property
     def type(self):
@@ -27,7 +28,7 @@ class MindsdbCredentials(Credentials):
         """
         List of keys to display in the `dbt debug` output.
         """
-        return 'host', 'port', 'user', 'database', 'schema'
+        return 'host', 'port', 'user', 'database'#, 'schema'
 
 
 
@@ -35,7 +36,7 @@ class MindsdbConnectionManager(SQLConnectionManager):
     TYPE = 'mindsdb'
 
     @classmethod
-    def get_response(cls, cursor: Cursor) -> AdapterResponse:
+    def get_response(cls, cursor) -> AdapterResponse:
         return AdapterResponse(
             _message="{}".format(f"OK. Rows affected: {cursor.rowcount}"),
             rows_affected=cursor.rowcount,
@@ -51,20 +52,24 @@ class MindsdbConnectionManager(SQLConnectionManager):
         credentials = connection.credentials
         # TODO: shoud we ue pymysql?
         try:
-            handle = pymysql.connect(
-                host=credentials.host,
+            handle = mysql.connector.connect(
+                server=credentials.host,
                 port=credentials.port,
-                user=credentials.username,
+                username=credentials.username,
                 password=credentials.password,
                 database=credentials.database
             )
             connection.state = 'open'
             connection.handle = handle
-        except pymysql.Error as exc:
+        except mysql.connector.Error as exc:
             logger.debug(
                 "Got an error when attempting to open a "
                 "connection: '{}'".format(exc)
             )
+            connection.handle = None
+            connection.state = "fail"
+
+            raise dbt.exceptions.FailedToConnectException(str(exc))
         return connection
 
 
@@ -76,10 +81,11 @@ class MindsdbConnectionManager(SQLConnectionManager):
     def exception_handler(self, sql: str):
         try:
             yield
-        except pymysql.DatabaseError as exc:
+        except mysql.connector.DatabaseError as exc:
             logger.debug('myadapter error: {}'.format(str(exc)))
             raise dbt.exceptions.DatabaseException(str(exc))
         except Exception as exc:
             logger.debug("Error running SQL: {}".format(sql))
             logger.debug("Rolling back transaction.")
             raise dbt.exceptions.RuntimeException(str(exc))
+

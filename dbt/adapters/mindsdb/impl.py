@@ -7,4 +7,7 @@ class MindsdbAdapter(SQLAdapter):
 
     @classmethod
     def date_function(cls):
-        return 'datenow()'
+        return 'current_date()'
+
+    def quote(self, identifier):
+        return '`{}`'.format(identifier)

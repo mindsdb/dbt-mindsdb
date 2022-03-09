@@ -18,6 +18,6 @@ setup(
     include_package_data=True,
     install_requires=[
         "dbt-core==1.0.1",
-        "pymysql"
+        "mysql-connector-python~=8.0.22",
     ]
 )
