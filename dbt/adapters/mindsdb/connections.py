@@ -10,7 +10,6 @@ from typing import Optional
 import dbt.exceptions
 import mysql.connector
 
-
 @dataclass
 class MindsdbCredentials(Credentials):
     host: str
@@ -50,7 +49,7 @@ class MindsdbConnectionManager(SQLConnectionManager):
             return connection
 
         credentials = connection.credentials
-        # TODO: shoud we ue pymysql?
+
         try:
             handle = mysql.connector.connect(
                 host=credentials.host,
