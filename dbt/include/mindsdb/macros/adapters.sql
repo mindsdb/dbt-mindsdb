@@ -24,10 +24,10 @@
 
 {% macro apply_predictor_wrap(sql, predictor_name, destination_table) -%}
 
-  create table {{ destination_table }} (
-     apply predictor {{ predictor_name }}
-     using (
-     {{ sql }}
-     )
-  )
+  create table {{ destination_table }}
+    select * from (
+       {{ sql }}
+    )
+    join {{ predictor_name }}
+
 {% endmacro %}
