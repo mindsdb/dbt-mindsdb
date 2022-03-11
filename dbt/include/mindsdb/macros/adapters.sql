@@ -24,6 +24,10 @@
 
 {% macro apply_predictor_wrap(sql, predictor_name, destination_table) -%}
 
-  apply predictor {{ predictor_name }} using ({{ sql }}) into table={{ destination_table }}
-
+  create table {{ destination_table }} (
+     apply predictor {{ predictor_name }}
+     using (
+     {{ sql }}
+     )
+  )
 {% endmacro %}
