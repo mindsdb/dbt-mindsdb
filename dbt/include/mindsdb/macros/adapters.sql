@@ -31,3 +31,17 @@
     join {{ predictor_name }}
 
 {% endmacro %}
+
+
+{% macro create_predictor_wrap(sql, predictor, integration, predict, predict_alias, using) -%}
+
+    CREATE PREDICTOR {{ predictor }}
+    FROM {{ integration }}  (
+        {{ sql }}
+    ) PREDICT {{ predict }} {% if predict_alias is not none %} as {{predict_alias}} {% endif %}
+     {% if using is not none %}
+     USING
+       {{using}}
+     {% endif %}
+
+{% endmacro %}
