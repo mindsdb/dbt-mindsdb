@@ -33,6 +33,12 @@
 {% endmacro %}
 
 
+{% macro drop_predictor_wrap(predictor) -%}
+
+    DROP PREDICTOR IF EXISTS {{ predictor }};
+
+{% endmacro %}
+
 {% macro create_predictor_wrap(sql, predictor, integration, predict, predict_alias, using) -%}
 
     CREATE PREDICTOR {{ predictor }}

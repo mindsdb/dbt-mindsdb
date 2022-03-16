@@ -33,6 +33,11 @@
 
   -- build model
   {%- call statement('main') -%}
+    {{ drop_predictor_wrap(predictor)}}
+  {%- endcall -%}
+
+
+  {%- call statement('main') -%}
     {{ create_predictor_wrap(
                              sql,
                              predictor,
