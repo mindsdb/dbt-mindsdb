@@ -1,0 +1,5 @@
+
+markupsafe==2.0.1
+dbt-core==1.0.1
+mysql-connector-python~=8.0.22
+

@@ -22,8 +22,10 @@
   {%- set using_str = None  -%}
    {% if using is not none %}
       {%- set using_list = []  -%}
-      {% for key, value in using.items() -%}
-         {{ using_list.append('{} = "{}"'.format(key, value))  }}
+      {%- set keys = using.keys() -%}
+
+      {% for key in keys|sort -%}
+         {{ using_list.append('{} = "{}"'.format(key, using[key]))  }}
       {%- endfor %}
 
       {% set using_str = using_list | join(',\n') %}
