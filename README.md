@@ -1,21 +1,12 @@
-# 🚧 dbt-mindsdb 🚧
+# MindsDB DBT adapter
 
 The dbt-mindsdb package allows dbt to connect to [MindsDB](https://github.com/mindsdb/mindsdb).
 
 
 ## Installation
 
-Atm, can only be installed from source:
-
 ```
-git clone git@github.com:mindsdb/dbt-mindsdb.git
-python setup.py develop
-```
-
-There is an dependency issue with latest dbt-core, so make sure to run:
-
-```
-pip install markupsafe==2.0.1
+pip install dbt-mindsdb
 ```
 
 ## Configurations
