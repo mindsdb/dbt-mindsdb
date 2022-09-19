@@ -5,6 +5,10 @@
   {%- set integration = config.get('integration') -%}
   {%- set predict = config.get('predict') -%}
   {%- set predict_alias = config.get('predict_alias') -%}
+  {%- set order_by = config.get('order_by', none) -%}
+  {%- set group_by = config.get('group_by', none) -%}
+  {%- set window = config.get('window', none) -%}
+  {%- set horizon = config.get('horizon', none) -%}
   {%- set using = config.get('using') -%}
 
   {% if integration is none %}
@@ -46,7 +50,8 @@
                              integration,
                              predict,
                              predict_alias,
-                             using_str )}}
+                             using_str,
+                             order_by, group_by, window, horizon )}}
   {%- endcall -%}
 
 
