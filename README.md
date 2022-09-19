@@ -66,6 +66,13 @@ Parameters:
       select * from stores
 ```
 
+- Other paramaters for time-series predictor:
+  - order_by - column that the time series will be order by. 
+  - group_by - rows that make a partition
+  - window - the number [int] of rows to "look back" into when making a prediction 
+  - horizon - keyword specifies the number of future predictions, default value is 1
+
+
 - To apply predictor add dbt model with "table" materialization. 
 It creates or replaces table in selected integration with results of predictor.
 Name of the model is used as name of the table to store prediction results. 

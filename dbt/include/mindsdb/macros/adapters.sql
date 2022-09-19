@@ -39,15 +39,27 @@
 
 {% endmacro %}
 
-{% macro create_predictor_wrap(sql, predictor, integration, predict, predict_alias, using) -%}
+{% macro create_predictor_wrap(sql, predictor, integration, predict, predict_alias, using, order_by, group_by, window, horizon) -%}
 
     CREATE PREDICTOR {{ predictor }}
     FROM {{ integration }}  (
         {{ sql }}
     ) PREDICT {{ predict }} {% if predict_alias is not none %} as {{predict_alias}} {% endif %}
-     {% if using is not none %}
-     USING
-       {{using}}
-     {% endif %}
+    {%- if using is not none %}
+    USING
+      {{using}}
+    {%- endif %}
+    {%- if order_by %}
+    ORDER BY {{order_by}}
+    {%- endif %} 
+    {%- if group_by %}
+    GROUP BY {{group_by}}
+    {%- endif %}
+    {%- if window %}
+    WINDOW {{window}}
+    {%- endif %}
+    {%- if horizon %}
+    HORIZON {{horizon}}
+    {%- endif %}
 
 {% endmacro %}
