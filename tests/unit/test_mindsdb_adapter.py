@@ -191,3 +191,46 @@ class TestMindsDBAdapter(unittest.TestCase):
         queries = self.get_dbt_queries()
 
         assert expected in queries
+
+
+
+    def test_create_database(self):
+        model = '''
+        {{
+        config(
+          materialized='database',
+          engine='trino',
+          parameters={
+            "user": "user",
+            "auth": "basic",
+            "http_scheme": "https",
+            "port": 443,
+            "password": "password",
+            "host": "localhost",
+            "catalog": "catalog",
+            "schema": "schema",
+            "with": "with (transactional = true)"
+          }
+        )
+        }}
+        '''
+
+        expected1 = 'DROP DATABASE IF EXISTS new_database'
+
+        expected2 = '''
+        CREATE DATABASE new_database WITH ENGINE='trino',
+        PARAMETERS={'user': 'user', 'auth': 'basic', 'http_scheme': 'https', 'port': 443, 'password': 'password', 'host': 'localhost', 'catalog': 'catalog', 'schema': 'schema', 'with': 'with (transactional = true)'}
+        '''
+
+        expected2 = self.sql_line_format(expected2)
+
+        self.add_model('new_database', model)
+        queries = self.get_dbt_queries()
+
+        # queries exist
+        assert expected1 in queries
+        assert expected2 in queries
+
+        # right queries order
+        assert queries.index(expected1) < queries.index(expected2)
+
