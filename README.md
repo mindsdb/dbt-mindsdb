@@ -42,6 +42,27 @@ mindsdb:
 ```    
     dbt init <project_name>
 ```
+- create a intergration with "database" materialization:
+```
+    {{
+    config(
+      materialized='database',
+      engine='trino',
+      parameters={
+        "user": env_var('TRINO_USER'),
+        "auth": "basic",
+        "http_scheme": "https",
+        "port": 443,
+        "password": env_var('TRINO_PASSWORD'),
+        "host": "trino.company.com",
+        "catalog": "hive",
+        "schema": "photorep_schema",
+        "with": "with (transactional = true)"
+      }
+    )
+    }}
+```
+
 - To create predictor add dbt model with "predictor" materialization: 
 Name of the model is used as name of predictor.
 Parameters:
