@@ -56,7 +56,8 @@ class MindsdbConnectionManager(SQLConnectionManager):
                 port=credentials.port,
                 username=credentials.username,
                 password=credentials.password,
-                database=credentials.database
+                database=credentials.database,
+                buffered=True
             )
             connection.state = 'open'
             connection.handle = handle

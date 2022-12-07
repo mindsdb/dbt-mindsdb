@@ -5,7 +5,10 @@
 
   -- build model
   {%- call statement('main') -%}
-    DROP DATABASE IF EXISTS {{ database }};
+    CREATE DATABASE {{ database }}
+  {%- endcall -%}
+  {%- call statement('main') -%}
+    DROP DATABASE IF EXISTS {{ database }}
   {%- endcall -%}
 
 
