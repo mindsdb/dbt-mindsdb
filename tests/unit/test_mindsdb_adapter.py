@@ -173,16 +173,15 @@ class TestMindsDBAdapter(unittest.TestCase):
     def test_prediction(self):
 
         model = '''
-            {{ config(materialized='table', predictor_name='TEST_PREDICTOR_NAME', integration='int1') }}
-                select a, bc from ddd where name > latest
+            {{ config(materialized='table', integration='int1') }}
+                select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
         '''
 
         expected = '''
             create or replace table `int1`.`schem`.`predict`
             select * from (
-                        select a, bc from ddd where name > latest
+                select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
             )
-            join TEST_PREDICTOR_NAME
         '''
 
         expected = self.sql_line_format(expected)
@@ -215,22 +214,24 @@ class TestMindsDBAdapter(unittest.TestCase):
         }}
         '''
 
-        expected1 = 'DROP DATABASE IF EXISTS new_database'
+        expected1 = 'SHOW DATABASES'
+        expected2 = 'DROP DATABASE IF EXISTS new_database'
 
-        expected2 = '''
+        expected3 = '''
         CREATE DATABASE new_database WITH ENGINE='trino',
         PARAMETERS={'user': 'user', 'auth': 'basic', 'http_scheme': 'https', 'port': 443, 'password': 'password', 'host': 'localhost', 'catalog': 'catalog', 'schema': 'schema', 'with': 'with (transactional = true)'}
         '''
 
-        expected2 = self.sql_line_format(expected2)
+        expected3 = self.sql_line_format(expected3)
 
         self.add_model('new_database', model)
         queries = self.get_dbt_queries()
 
         # queries exist
         assert expected1 in queries
-        assert expected2 in queries
+        assert expected2 not in queries
+        assert expected3 in queries
 
         # right queries order
-        assert queries.index(expected1) < queries.index(expected2)
+        assert queries.index(expected1) < queries.index(expected3)
 
