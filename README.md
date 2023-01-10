@@ -104,9 +104,11 @@ Parameters:
   - integration - name of used integration to get data from and save result to.
     In has to be created in mindsdb beforehand
 ```    
-    {{ config(materialized='table', predictor_name='TEST_PREDICTOR_NAME', integration='int1') }}
-        select a, bc from ddd where name > latest
+    {{ config(materialized='table', integration='int1') }}
+        select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
 ```
+
+Notes: "predictor_name" has been removed from model configuration. Instead a JOIN sentence need to be set explicitly
 
 ## Testing
 
