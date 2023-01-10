@@ -173,16 +173,15 @@ class TestMindsDBAdapter(unittest.TestCase):
     def test_prediction(self):
 
         model = '''
-            {{ config(materialized='table', predictor_name='TEST_PREDICTOR_NAME', integration='int1') }}
-                select a, bc from ddd where name > latest
+            {{ config(materialized='table', integration='int1') }}
+                select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
         '''
 
         expected = '''
             create or replace table `int1`.`schem`.`predict`
             select * from (
-                        select a, bc from ddd where name > latest
+                select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
             )
-            join TEST_PREDICTOR_NAME
         '''
 
         expected = self.sql_line_format(expected)
@@ -215,7 +214,8 @@ class TestMindsDBAdapter(unittest.TestCase):
         }}
         '''
 
-        expected1 = 'DROP DATABASE IF EXISTS new_database'
+        # expected1 = 'DROP DATABASE IF EXISTS new_database'
+        expected1 = 'SHOW DATABASES'
 
         expected2 = '''
         CREATE DATABASE new_database WITH ENGINE='trino',

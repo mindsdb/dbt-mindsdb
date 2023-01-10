@@ -99,14 +99,13 @@ It creates or replaces table in selected integration with results of predictor.
 Name of the model is used as name of the table to store prediction results. 
 If you need to specify schema you can do it with dot separator: schema_name.table_name.sql    
 Parameters:
-  - predictor_name - name of using predictor.
-    It has to be created in mindsdb
   - integration - name of used integration to get data from and save result to.
     In has to be created in mindsdb beforehand
 ```    
-    {{ config(materialized='table', predictor_name='TEST_PREDICTOR_NAME', integration='int1') }}
-        select a, bc from ddd where name > latest
+    {{ config(materialized='table', integration='int1') }}
+        select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
 ```
+Notes: predictor_name has been removed. Instead it must be set explicitly in JOIN part of the model
 
 ## Testing
 
