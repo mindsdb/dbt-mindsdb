@@ -24,7 +24,7 @@
 
   -- build model
   {% call statement('main') %}
-       {{ apply_predictor_wrap(sql, target_relation) }}
+       {{ save_to_table_wrap(sql, target_relation) }}
   {% endcall %}
 
   -- ... run post-hooks ...

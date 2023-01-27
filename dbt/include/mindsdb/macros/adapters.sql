@@ -22,7 +22,7 @@
 {% endmacro %}
 
 
-{% macro apply_predictor_wrap(sql, destination_table) -%}
+{% macro save_to_table_wrap(sql, destination_table) -%}
 
   create or replace table {{ destination_table }}
     select * from (
