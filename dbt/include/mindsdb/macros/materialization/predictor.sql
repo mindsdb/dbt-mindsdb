@@ -11,10 +11,6 @@
   {%- set horizon = config.get('horizon', none) -%}
   {%- set using = config.get('using') -%}
 
-  {% if integration is none %}
-      {{ exceptions.raise_compiler_error('Integration is not set') }}
-  {% endif %}
-
   {% if predict is none %}
       {{ exceptions.raise_compiler_error('Predict target is not set') }}
   {% endif %}
