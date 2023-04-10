@@ -69,7 +69,7 @@ class MindsdbConnectionManager(SQLConnectionManager):
             connection.handle = None
             connection.state = "fail"
 
-            raise dbt.exceptions.FailedToConnectException(str(exc))
+            raise dbt.exceptions.FailedToConnectError(str(exc))
         return connection
 
 
@@ -83,9 +83,9 @@ class MindsdbConnectionManager(SQLConnectionManager):
             yield
         except mysql.connector.DatabaseError as exc:
             logger.debug('myadapter error: {}'.format(str(exc)))
-            raise dbt.exceptions.DatabaseException(str(exc))
+            raise dbt.exceptions.DbtDatabaseError(str(exc))
         except Exception as exc:
             logger.debug("Error running SQL: {}".format(sql))
             logger.debug("Rolling back transaction.")
-            raise dbt.exceptions.RuntimeException(str(exc))
+            raise dbt.exceptions.DbtRuntimeError(str(exc))
 
