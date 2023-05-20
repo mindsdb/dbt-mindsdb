@@ -3,7 +3,7 @@ from setuptools import find_namespace_packages, setup
 
 package_name = "dbt-mindsdb"
 # make sure this always matches dbt/adapters/mindsdb/__version__.py
-package_version = "1.0.2"
+package_version = "1.0.3"
 description = """The dbt adapter plugin for connecting to MindsDB"""
 with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()

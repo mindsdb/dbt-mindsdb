@@ -31,15 +31,22 @@
 {% endmacro %}
 
 
-{% macro drop_predictor_wrap(predictor) -%}
-
-    DROP PREDICTOR IF EXISTS {{ predictor }};
+{% macro drop_predictor_wrap(project, predictor) -%}
+    {% if project is none %} 
+    DROP PREDICTOR IF EXISTS mindsdb.{{ predictor }};
+    {% else %}
+    DROP PREDICTOR IF EXISTS {{ project }}.{{ predictor }};
+    {% endif %}
 
 {% endmacro %}
 
-{% macro create_predictor_wrap(sql, predictor, integration, predict, predict_alias, using, order_by, group_by, window, horizon) -%}
+{% macro create_predictor_wrap(sql, project, predictor, integration, predict, predict_alias, using, order_by, group_by, window, horizon) -%}
 
-    CREATE PREDICTOR {{ predictor }}
+    {% if project is none %} 
+    CREATE PREDICTOR mindsdb.{{ predictor }}
+    {% else %}
+    CREATE PREDICTOR {{ project }}.{{ predictor }}
+    {% endif %}
     {%- if integration is not none %}
     FROM {{ integration }}  (
         {{ sql }}

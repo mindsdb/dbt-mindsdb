@@ -12,6 +12,7 @@ import mysql.connector
 
 @dataclass
 class MindsdbCredentials(Credentials):
+    _ALIASES = {"project": "schema"}
     host: str
     port: int
     username: str

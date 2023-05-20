@@ -1,4 +1,4 @@
-{% materialization database, adapter='mindsdb' %}
+{% materialization integration, adapter='mindsdb' %}
   {%- set database = model['alias'] -%}
   {%- set engine = config.get('engine') -%}
   {%- set prefix = config.get('prefix') -%}

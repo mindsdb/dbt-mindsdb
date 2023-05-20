@@ -17,11 +17,12 @@ Basic `profile.yml` for connecting to MindsDB:
 mindsdb:
   outputs:
     dev:
-      database: 'mindsdb'
       host: '127.0.0.1'
       password: ''
       port: 47335
-      schema: 'mindsdb'
+      database: 'mindsdb'
+      project: 'my_project'
+      # schema: 'my_project'
       type: mindsdb
       username: 'mindsdb'
   target: dev
@@ -29,12 +30,12 @@ mindsdb:
 ```
 | Key      | Required | Description                                          | Example                        |
 | -------- | -------- | ---------------------------------------------------- | ------------------------------ |
-| type     |    ✔️   | The specific adapter to use                          | `mindsdb`                      |
-| host     |    ✔️   | The MindsDB (hostname) to connect to                 | `cloud.mindsdb.com`            |
-| port     |    ✔️   | The port to use                                      | `3306`  or `47335`             |
-| schema   |    ✔️   | Specify the schema (database) to build models into   | The MindsDB datasource         |
-| username |    ✔️   | The username to use to connect to the server         | `mindsdb` or mindsdb cloud user|
-| password |    ✔️   | The password to use for authenticating to the server | `pass                          |
+| type     |    ✔️   | The specific adapter to use                            | `mindsdb`                      |
+| host     |    ✔️   | The MindsDB (hostname) to connect to                   | `cloud.mindsdb.com`            |
+| port     |    ✔️   | The port to use                                        | `3306`  or `47335`             |
+| schema   |    ✔️   | Specify the schema (project) to build models into      | The MindsDB datasource         |
+| username |    ✔️   | The username to use to connect to the server           | `mindsdb` or mindsdb cloud user|
+| password |    ✔️   | The password to use for authenticating to the server   | `pass                          |
 
 ## Usage
 
@@ -42,11 +43,11 @@ mindsdb:
 ```    
     dbt init <project_name>
 ```
-- create a intergration with "database" materialization:
+- create a integration with "integration" materialization:
 ```
     {{
     config(
-      materialized='database',
+      materialized='integration',
       engine='trino',
       parameters={
         "user": env_var('TRINO_USER'),
@@ -103,7 +104,7 @@ Parameters:
     In has to be created in mindsdb beforehand
 ```    
     {{ config(materialized='table', integration='int1') }}
-        select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
+        select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > LATEST
 ```
 Notes: predictor_name has been removed. Instead it must be set explicitly in JOIN part of the model
 
