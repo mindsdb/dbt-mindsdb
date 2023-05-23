@@ -17,10 +17,13 @@
   {%- endfor %}
 
   -- final
-  {% set target_relation = target_relation_list | join('.') %}
+  {%- set target_relation = api.Relation.create(identifier=target_relation_list[1],
+                                                schema=target_relation_list[0],
+                                                type='table') -%}
 
   -- ... setup database ...
   -- ... run pre-hooks...
+  {{ run_hooks(pre_hooks) }}
 
   -- build model
   {% call statement('main') %}
@@ -28,10 +31,10 @@
   {% endcall %}
 
   -- ... run post-hooks ...
+  {{ run_hooks(post_hooks) }}
   -- ... clean up the database...
 
   -- Return the relations created in this materialization
-
-  {{ return({'relations': []}) }}
+  {{ return({'relations': [target_relation]}) }}
 
 {%- endmaterialization -%}

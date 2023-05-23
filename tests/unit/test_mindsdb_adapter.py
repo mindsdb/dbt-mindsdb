@@ -31,13 +31,13 @@ DBT_PROFILE_TMPL = '''
 demo:
   outputs:
     dev:
-      database: mindsdb
       host: 127.0.0.1
-      password: ''
       port: 47335
       type: mindsdb
+      database: mindsdb
+      schema: myproject
       username: mindsdb
-      schema: mindsdb
+      password: ''
   target: dev
 '''
 
@@ -145,10 +145,10 @@ class TestMindsDBAdapter(unittest.TestCase):
           select * from stores
         '''
 
-        expected1 = 'DROP PREDICTOR IF EXISTS new_predictor'
+        expected1 = 'DROP PREDICTOR IF EXISTS myproject.new_predictor'
 
         expected2 = '''
-        CREATE PREDICTOR new_predictor
+        CREATE PREDICTOR myproject.new_predictor
             FROM photorep  (
                   select * from stores
             ) PREDICT name  as name 
@@ -178,7 +178,7 @@ class TestMindsDBAdapter(unittest.TestCase):
         '''
 
         expected = '''
-            create or replace table `int1`.`schem`.`predict`
+            create or replace table `int1`.`predict`
             select * from (
                 select a, bc from ddd JOIN TEST_PREDICTOR_NAME where name > latest
             )
@@ -186,18 +186,18 @@ class TestMindsDBAdapter(unittest.TestCase):
 
         expected = self.sql_line_format(expected)
 
-        self.add_model('schem.predict', model)
+        self.add_model('predict', model)
         queries = self.get_dbt_queries()
 
         assert expected in queries
 
 
 
-    def test_create_database(self):
+    def test_create_integraton(self):
         model = '''
         {{
         config(
-          materialized='database',
+          materialized='integration',
           engine='trino',
           parameters={
             "user": "user",
@@ -214,17 +214,16 @@ class TestMindsDBAdapter(unittest.TestCase):
         }}
         '''
 
-        # expected1 = 'DROP DATABASE IF EXISTS new_database'
         expected1 = 'SHOW DATABASES'
 
         expected2 = '''
-        CREATE DATABASE new_database WITH ENGINE='trino',
+        CREATE DATABASE new_integration WITH ENGINE='trino',
         PARAMETERS={'user': 'user', 'auth': 'basic', 'http_scheme': 'https', 'port': 443, 'password': 'password', 'host': 'localhost', 'catalog': 'catalog', 'schema': 'schema', 'with': 'with (transactional = true)'}
         '''
 
         expected2 = self.sql_line_format(expected2)
 
-        self.add_model('new_database', model)
+        self.add_model('new_integration', model)
         queries = self.get_dbt_queries()
 
         # queries exist

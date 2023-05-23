@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass,field
 
 from dbt.adapters.base.relation import BaseRelation, Policy
 from dbt.contracts.relation import ComponentName
@@ -13,7 +13,7 @@ class MindsdbQuotePolicy(Policy):
 
 @dataclass(frozen=True, eq=False, repr=False)
 class MindsdbRelation(BaseRelation):
-    quote_policy: MindsdbQuotePolicy = MindsdbQuotePolicy()
+    quote_policy: MindsdbQuotePolicy = field(default_factory=lambda: MindsdbQuotePolicy())
 
     # Overridden as Mindsdb converts relation identifiers to lowercase
     def _is_exactish_match(self, field: ComponentName, value: str) -> bool:

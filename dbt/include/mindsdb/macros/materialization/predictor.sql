@@ -1,6 +1,7 @@
 
 {% materialization predictor, adapter='mindsdb' %}
 
+  {%- set project = model.schema -%}
   {%- set predictor = model['alias'] -%}
   {%- set integration = config.get('integration') -%}
   {%- set predict = config.get('predict') -%}
@@ -34,14 +35,16 @@
 
 
   -- build model
+  -- even if project does not exists, mindsdb returns no error
   {%- call statement('main') -%}
-    {{ drop_predictor_wrap(predictor)}}
+    {{ drop_predictor_wrap(project, predictor)}}
   {%- endcall -%}
 
 
   {%- call statement('main') -%}
     {{ create_predictor_wrap(
                              sql,
+                             project,
                              predictor,
                              integration,
                              predict,
