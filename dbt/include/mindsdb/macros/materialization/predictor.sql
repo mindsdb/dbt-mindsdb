@@ -26,7 +26,7 @@
       {%- set keys = using.keys() -%}
 
       {% for key in keys|sort -%}
-         {{ using_list.append('{} = "{}"'.format(key, using[key]))  }}
+         {{ using_list.append('{} = {}'.format(key, using[key] | tojson) )  }}
       {%- endfor %}
 
       {% set using_str = using_list | join(',\n') %}
